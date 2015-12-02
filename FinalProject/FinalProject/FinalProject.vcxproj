@@ -145,7 +145,13 @@
     <ClCompile Include="FinalProject.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdjListNode.h" />
+    <ClInclude Include="Edge.h" />
     <ClInclude Include="Flight.h" />
+    <ClInclude Include="graph.h" />
+    <ClInclude Include="HashTable.h" />
+    <ClInclude Include="LinkedHashedEntry.h" />
+    <ClInclude Include="NotFoundException.h" />
     <ClInclude Include="Passenger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
