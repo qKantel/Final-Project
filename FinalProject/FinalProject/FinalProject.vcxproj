@@ -143,16 +143,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FinalProject.cpp" />
+    <ClCompile Include="Passenger.cpp" />
+    <ClCompile Include="ReservationSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdjListNode.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Flight.h" />
-    <ClInclude Include="graph.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="HashTable.h" />
     <ClInclude Include="LinkedHashedEntry.h" />
     <ClInclude Include="NotFoundException.h" />
     <ClInclude Include="Passenger.h" />
+    <ClInclude Include="ReservationSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
