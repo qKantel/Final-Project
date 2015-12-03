@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FinalProject.cpp" />
+    <ClCompile Include="Flight.cpp" />
     <ClCompile Include="Passenger.cpp" />
     <ClCompile Include="ReservationSystem.cpp" />
   </ItemGroup>
