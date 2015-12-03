@@ -71,7 +71,7 @@ public:
 	void BFS(const Type_V & v);
 
 	/** Finds weight of Shortest Path between nodes start vertex s and destination vertex d*/
-	Type_W shortestPath(const Type_V & s, const Type_V & d)
+	Type_W shortestPath(const Type_V & s, const Type_V & d);
 }; // end Graph
 // End of header file
 
