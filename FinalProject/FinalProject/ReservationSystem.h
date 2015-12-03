@@ -2,10 +2,17 @@
 #ifndef RS_H
 #define RS_H
 
-#include <fstream>
-#include <iostream>
+// clibrary
+#include <ctime>
+
+// containers
 #include <map>
 
+// input/output
+#include <fstream>
+#include <iostream>
+
+// local includes
 #include "Flight.h"
 #include "Graph.h"
 #include "Passenger.h"
@@ -41,6 +48,8 @@ private:
 	// Class Data
 	p_map passengers;
 	f_map flights;
+	Graph<char, int> *flightMap;
+	tm input_time;
 
 	// Initialization
 	void initialize();

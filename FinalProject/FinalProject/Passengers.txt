@@ -1,4 +1,4 @@
-﻿Margaret            ﻿Trundle             Pilot Club          1                    11
+﻿Margaret            Trundle             Pilot Club          1                    11
 Sharron             Mattson             First Class         2                    16
 Ruth                Green               First Class         3                    10
 Joseph              Blake               Business Class      4                    18

@@ -5,6 +5,31 @@ ReservationSystem * ReservationSystem::p_rsvs_instance_ = nullptr;
 
 bool ReservationSystem::runMenu()
 {
+	bool valid_time = false;
+	string time_str;
+	while (!valid_time)
+	{
+		cout << "Please input your time reference (format HH:MM): " << endl;
+		getline(cin, time_str);
+		if (time_str.size() == 5)
+		{
+			try
+			{
+				input_time.tm_hour = stoi(time_str.substr(0, 2));
+				input_time.tm_min = stoi(time_str.substr(3, 2));
+				valid_time = true;
+			}
+			catch (invalid_argument)
+			{
+				cout << "That was an invalid time." << endl;
+			}
+		}
+		else // invalid time input
+		{
+			cout << "That was an invalid time." << endl;
+		}
+	}
+
 	//Initialize selection variable.
 	char selection;
 
@@ -140,11 +165,11 @@ bool ReservationSystem::openPassengerData(const string & fileName)
 		aPassenger.setMembership(membership);
 
 		// 60 - 80
-		iBuf = stoi(buffer.substr(60, 4));
+		iBuf = stoi(buffer.substr(60, 21));
 		aPassenger.setReservationNumber(iBuf);
 
 		// 80 - 100
-		iBuf = stoi(buffer.substr(80, 4));
+		iBuf = stoi(buffer.substr(81));
 		aPassenger.setflightNumber(iBuf);
 
 		passengers.insert(p_map::value_type(aPassenger.getReservationNumber(), aPassenger));
@@ -158,24 +183,23 @@ bool ReservationSystem::openPassengerData(const string & fileName)
 
 void ReservationSystem::createGraph()
 {
-	Graph<char, int> flightMap(14);
+	flightMap = new Graph<char, int>(14);
 
-	flightMap.add(Edge<char, int>('A', 'B', 142));
-	flightMap.add(Edge<char, int>('A', 'C', 170));
-	flightMap.add(Edge<char, int>('C', 'D', 114));
-	flightMap.add(Edge<char, int>('D', 'E', 93));
-	flightMap.add(Edge<char, int>('D', 'M', 209));
-	flightMap.add(Edge<char, int>('M', 'N', 208));
-	flightMap.add(Edge<char, int>('N', 'P', 134));
-	flightMap.add(Edge<char, int>('P', 'O', 193));
-	flightMap.add(Edge<char, int>('E', 'F', 155));
-	flightMap.add(Edge<char, int>('F', 'G', 184));
-	flightMap.add(Edge<char, int>('F', 'I', 160));
-	flightMap.add(Edge<char, int>('I', 'G', 83));
-	flightMap.add(Edge<char, int>('I', 'L', 88));
-	flightMap.add(Edge<char, int>('I', 'J', 73));
+	flightMap->add(Edge<char, int>('A', 'B', 142));
+	flightMap->add(Edge<char, int>('A', 'C', 170));
+	flightMap->add(Edge<char, int>('C', 'D', 114));
+	flightMap->add(Edge<char, int>('D', 'E', 93));
+	flightMap->add(Edge<char, int>('D', 'M', 209));
+	flightMap->add(Edge<char, int>('M', 'N', 208));
+	flightMap->add(Edge<char, int>('N', 'P', 134));
+	flightMap->add(Edge<char, int>('P', 'O', 193));
+	flightMap->add(Edge<char, int>('E', 'F', 155));
+	flightMap->add(Edge<char, int>('F', 'G', 184));
+	flightMap->add(Edge<char, int>('F', 'I', 160));
+	flightMap->add(Edge<char, int>('I', 'G', 83));
+	flightMap->add(Edge<char, int>('I', 'L', 88));
+	flightMap->add(Edge<char, int>('I', 'J', 73));
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -458,16 +482,27 @@ void ReservationSystem::pasByFlight_Option()
 
 void ReservationSystem::pasOverbook_Option()
 {
-
-	//Pause program.
-	pauseProgram();
+	for (size_t curFlight = 0; curFlight != flights.size(); curFlight++)
+	{
+		vector<size_t> p_vec = flights[curFlight].getManifest();
+		for (size_t iterator = 40; iterator >= p_vec.size(); iterator++)
+			passengers[p_vec[iterator]];
+	}
 }
 
 void ReservationSystem::pasWaiting_Option()
 {
-
-	//Pause program.
-	pauseProgram();
+	for (size_t curFlight = 0; curFlight != flights.size(); curFlight++)
+	{
+		/*
+		if (flights[curFlight].getDepartTime() == input_time)//current time
+		{
+			vector<size_t> passengers = flights[curFlight].getManifest();
+			for (size_t iterator = 0; iterator >= passengers.size(); iterator++)
+				passengers[passengers[iterator]];
+		}
+		*/
+	}
 }
 
 void ReservationSystem::allFlights_Option()
