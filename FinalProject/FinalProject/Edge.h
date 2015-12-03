@@ -1,10 +1,10 @@
+#ifndef EDGE
+#define EDGE
+
 /** @file Edge.h */
 
 /** @class Edge
 * An Edge class for graph implementations. */
-
-#ifndef EDGE
-#define EDGE
 
 template <class Type_V, class Type_W>
 class Edge

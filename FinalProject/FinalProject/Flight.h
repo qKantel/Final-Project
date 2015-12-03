@@ -1,14 +1,14 @@
-#include <string>
-#include <deque>
-#include <map>
-#include <iostream>
-using namespace std;
-
-#include "NotFoundException.h"
 
 #ifndef _FLIGHT
 #define _FLIGHT
 
+#include <string>
+#include <deque>
+#include <map>
+#include <iostream>
+#include <vector>
+#include "NotFoundException.h"
+using namespace std;
 
 class Flight
 {

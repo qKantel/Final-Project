@@ -1,4 +1,8 @@
+#ifndef PASSENGER_H
+#define PASSENGER_H
+
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -29,3 +33,5 @@ public:
 	void setReservationNumber(int areservationNumber) { reservationNumber = areservationNumber; }
 	void setflightNumber(int aflightNumber) { flightNumber = aflightNumber; }
 };
+
+#endif
