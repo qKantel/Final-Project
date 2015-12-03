@@ -1,4 +1,5 @@
 
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <vector>
@@ -38,8 +39,8 @@ void pasWaiting_Option();
 void allFlights_Option();
 void flightsAndPas_Option();
 
-typedef map <string, passenger> p_map;
-typedef map <string, Flights> f_map;
+typedef map <size_t, passenger> p_map;
+typedef map <size_t, Flight> f_map;
 
 int main()
 {
@@ -47,44 +48,40 @@ int main()
 	p_map passengers;
 	f_map flights;
 
-	Edge<char, int> e1('A', 'B', 142);
-	Edge<char, int> e2('A', 'C', 170);
-	Edge<char, int> e3('C', 'D', 114);
-	Edge<char, int> e4('D', 'E', 93);
-	Edge<char, int> e5('D', 'M', 209);
-	Edge<char, int> e6('M', 'N', 208);
-	Edge<char, int> e7('N', 'P', 134);
-	Edge<char, int> e8('P', 'O', 193);
-	Edge<char, int> e9('E', 'F', 155);
-	Edge<char, int> e10('F', 'G', 184);
-	Edge<char, int> e11('F', 'I', 160);
-	Edge<char, int> e12('I', 'G', 83);
-	Edge<char, int> e13('I', 'L', 88);
-	Edge<char, int> e14('I', 'J', 73);
-	flightMap.add(e1);
-	flightMap.add(e2);
-	flightMap.add(e3);
-	flightMap.add(e4);
-	flightMap.add(e5);
-	flightMap.add(e6);
-	flightMap.add(e7);
-	flightMap.add(e8);
-	flightMap.add(e9);
-	flightMap.add(e10);
-	flightMap.add(e11);
-	flightMap.add(e12);
-	flightMap.add(e13);
-	flightMap.add(e14);
+	flightMap.add(Edge<char, int> ('A', 'B', 142));
+	flightMap.add(Edge<char, int> ('A', 'C', 170));
+	flightMap.add(Edge<char, int> ('C', 'D', 114));
+	flightMap.add(Edge<char, int> ('D', 'E', 93));
+	flightMap.add(Edge<char, int> ('D', 'M', 209));
+	flightMap.add(Edge<char, int> ('M', 'N', 208));
+	flightMap.add(Edge<char, int> ('N', 'P', 134));
+	flightMap.add(Edge<char, int> ('P', 'O', 193));
+	flightMap.add(Edge<char, int> ('E', 'F', 155));
+	flightMap.add(Edge<char, int> ('F', 'G', 184));
+	flightMap.add(Edge<char, int> ('F', 'I', 160));
+	flightMap.add(Edge<char, int> ('I', 'G', 83));
+	flightMap.add(Edge<char, int> ('I', 'L', 88));
+	flightMap.add(Edge<char, int> ('I', 'J', 73));
 
-	// Put in loop that accepts all passenger data
-	passengers.insert(p_map::value_type(rn, passenger(afirstName, alastName, aMembership, areservationNumber, aflightNumber)));
+	// Create all flight objects
+	string fileName = "Flights.txt";
+	bool ableToOpen;
+	do
+	{
+		ableToOpen = openFlightData(fileName, flights);
+		if (!ableToOpen)
+		{
+			cout << fileName << " cannot be opened.  Enter another file name -->  ";
+			getline(cin, fileName);
+		}
+	} while (!ableToOpen);
 
-	// Put in loop that accepts all flight data
-	flights.insert(f_map::value_type(fn, ));
+	// TODO:	Create all passenger objects
+	//			insert into appropriate flight object
+
 
 	//Initialize selection variable.
 	char selection;
-
 	//Main Menu loop.
 	do
 	{
@@ -112,6 +109,42 @@ int main()
 	return 0;
 }
 
+bool openFlightData(const string& fileName, f_map& allFlights)
+{
+	ifstream flightData(fileName);
+	string fromCity, toCity;
+	int flightNumber, departTime, arriveTime;
+
+	if (flightData.fail())
+		return false;
+	else  // Able to open file for processing
+	{
+		while (!flightData.eof())
+		{
+			// Create new Flight objects using data from file
+			Flight* flights = new Flight();
+
+			flightData >> flightNumber;
+			flightData >> departTime;
+			flightData >> arriveTime;
+			flightData >> fromCity;
+			flightData >> toCity;
+
+			flights->addFlightNumber(flightNumber);
+			flights->addDepartTime(departTime);
+			flights->addArriveTime(arriveTime);
+			flights->addOrigin(fromCity);
+			flights->addDestination(toCity);
+
+			// Add new Flight objects to vector
+			allFlights.insert(f_map::value_type( flights->getFlightNumber(), *flights ));
+			delete flights;
+			flights = nullptr;
+		}  // end while
+		flightData.close();
+	}  // end if
+	return true;
+}  // end openFlightData
 
 //////////////////////////////////////////////////////////////////////////////////
 //							Menu Functions
@@ -328,11 +361,19 @@ void pasByDeparture_Option()
 	pauseProgram();
 }
 
-void pasByFlight_Option()
+// #4
+void pasByFlight_Option(p_map &pasMap, int &flightNum)
 {
-
-	//Pause program.
-	pauseProgram();
+	typedef p_map::iterator it_type;
+	for (it_type iterator = pasMap.begin(); iterator != pasMap.end(); iterator++)
+	{
+		if (iterator->second.getFlightNumber() == flightNum)
+		{
+			cout << iterator->second;
+		}
+		//else
+		//Not On This Flight
+	}
 }
 
 void pasOverbook_Option()
