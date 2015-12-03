@@ -1,9 +1,9 @@
+#ifndef _HASH_TABLE
+#define _HASH_TABLE
+
 #include "LinkedHashedEntry.h"
 #include "NotFoundException.h"
 #include <vector>
-
-#ifndef _HASH_TABLE
-#define _HASH_TABLE
 
 const int TABLE_SIZE = 41;
 

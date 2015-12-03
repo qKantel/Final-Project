@@ -1,8 +1,8 @@
-#include <map>
-using namespace std;
-
 #ifndef ADJ_LIST_NODE
 #define ADJ_LIST_NODE
+
+#include <map>
+using namespace std;
 
 template <class Type_V, class Type_W>
 class AdjListNode

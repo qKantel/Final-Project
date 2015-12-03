@@ -1,6 +1,5 @@
+
 #include "Passenger.h"
-#include <vector>
-#include <fstream>
 
 Passenger::Passenger()
 {

@@ -1,3 +1,6 @@
+#ifndef GRAPH
+#define GRAPH
+
 #include <vector>
 #include <list>
 #include <map>
@@ -8,8 +11,7 @@ using namespace std;
 
 /** An adjacency list representation of an undirected,
 * weighted graph. */
-#ifndef GRAPH
-#define GRAPH
+
 
 template <class Type_V, class Type_W>
 class Graph
