@@ -30,7 +30,7 @@ public:
 	void setFirstName(string afirstName) { firstName = afirstName; }
 	void setLastName(string alastName) { lastName = alastName; }
 	void setMembership(string aMembership) { Membership = aMembership; }
-	void setReservationNumber(int areservationNumber) { reservationNumber = areservationNumber; }
+	void setReservationNumber(size_t areservationNumber) { reservationNumber = areservationNumber; }
 	void setflightNumber(int aflightNumber) { flightNumber = aflightNumber; }
 };
 

@@ -48,6 +48,7 @@ private:
 	// Class Data
 	p_map passengers;
 	f_map flights;
+	vector<string> cities;
 	Graph<char, int> *flightMap;
 	tm input_time;
 

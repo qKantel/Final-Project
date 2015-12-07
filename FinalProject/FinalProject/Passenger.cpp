@@ -6,7 +6,7 @@ Passenger::Passenger()
 	firstName = "";
 	lastName = "";
 	Membership = "";
-	reservationNumber = 0;
+	reservationNumber = -1;
 	flightNumber = -1;
 }
 
@@ -18,11 +18,12 @@ Passenger::Passenger(string afirstName, string alastName, string aMembership, si
 ostream& operator<<(ostream& out , const Passenger& aPassenger)
 {
 	out << aPassenger.getFirstName() << "   " << aPassenger.getLastName() << "   " << aPassenger.getMembership()
-		<< "   " << aPassenger.getFlightNumber() << endl;
+		<< "   " << aPassenger.getFlightNumber();
 	return out;
 
 }
 
+/*
 istream& operator>>(istream& in, Passenger& aPassenger)
 {
 	int iBuf;
@@ -56,3 +57,4 @@ istream& operator>>(istream& in, Passenger& aPassenger)
 
 	return in;
 }
+*/

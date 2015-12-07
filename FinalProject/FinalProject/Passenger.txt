@@ -1,4 +1,5 @@
-﻿Margaret            Trundle             Pilot Club          1                    11
+﻿FirstName			LastName			Membership			Res. #				 Flight #
+Margaret            Trundle             Pilot Club          1                    11
 Sharron             Mattson             First Class         2                    16
 Ruth                Green               First Class         3                    10
 Joseph              Blake               Business Class      4                    18
@@ -97,7 +98,7 @@ Edward              Walsh               Pilot Club          96                  
 Jayden              Bland               Economy             97                   14
 Gwen                Sutherland          First Class         98                   2
 Mohammad            Wells               Economy             99                   4
-Finlay              Edelen              Business Class      100                   6
+Finlay              Edelen              Business Class      100                  6
 Caitlin             Gannon              Economy             101                  5
 Jacob               Martin              First Class         102                  11
 Timothy             Acker               Business Class      103                  4

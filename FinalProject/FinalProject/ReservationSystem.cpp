@@ -9,8 +9,9 @@ bool ReservationSystem::runMenu()
 	string time_str;
 	while (!valid_time)
 	{
-		cout << "Please input your time reference (format HH:MM): " << endl;
+		cout << "Please input your time reference (format HH:MM): ";
 		getline(cin, time_str);
+		// TODO, allow user to input 'e' to end
 		if (time_str.size() == 5)
 		{
 			try
@@ -67,7 +68,25 @@ void ReservationSystem::closeMenu()
 
 void ReservationSystem::initialize()
 {
+	// TODO
+	// Is this function all we need to initialize graphs?
 	createGraph();
+
+
+	cities.push_back("A");
+	cities.push_back("B");
+	cities.push_back("C");
+	cities.push_back("D");
+	cities.push_back("E");
+	cities.push_back("F");
+	cities.push_back("G");
+	cities.push_back("I");
+	cities.push_back("J");
+	cities.push_back("L");
+	cities.push_back("M");
+	cities.push_back("N");
+	cities.push_back("O");
+	cities.push_back("P");
 
 	// Create all flight objects
 	string flights_filename = "Flights.txt";
@@ -83,7 +102,7 @@ void ReservationSystem::initialize()
 	} while (!ableToOpen);
 
 	// Create all passenger objects
-	string passengers_filename = "Passengers.txt";
+	string passengers_filename = "Passenger.txt";
 	do
 	{
 		ableToOpen = openPassengerData(passengers_filename);
@@ -134,7 +153,7 @@ bool ReservationSystem::openFlightData(const string & fileName)
 
 bool ReservationSystem::openPassengerData(const string & fileName)
 {
-	fstream in(fileName);
+	ifstream in(fileName);
 
 	if (in.fail())
 		return false;
@@ -144,7 +163,7 @@ bool ReservationSystem::openPassengerData(const string & fileName)
 	string buffer, temp;
 	string delimiter = " ";  // Remove trailing whitespace
 
-
+	getline(in, buffer, '\n');
 	while (!in.eof())
 	{
 		getline(in, buffer, '\n');
@@ -155,21 +174,25 @@ bool ReservationSystem::openPassengerData(const string & fileName)
 		aPassenger.setFirstName(firstname);
 
 		// 20-40
-		temp = buffer.substr(20, 20);
+		temp = buffer.substr(20, 19);
 		string lastname = temp.substr(0, temp.find_last_not_of(delimiter) + 1);
 		aPassenger.setLastName(lastname);
 
 		// 40 - 60
-		temp = buffer.substr(40, 20);
+		temp = buffer.substr(40, 19);
 		string membership = temp.substr(0, temp.find_last_not_of(delimiter) + 1);
 		aPassenger.setMembership(membership);
 
 		// 60 - 80
-		iBuf = stoi(buffer.substr(60, 21));
+		temp = buffer.substr(60, 4);
+		temp = temp.substr(0, temp.find_last_not_of(delimiter) + 1);
+		iBuf = stoi(temp);
 		aPassenger.setReservationNumber(iBuf);
 
 		// 80 - 100
-		iBuf = stoi(buffer.substr(81));
+		temp = buffer.substr(81);
+		temp = temp.substr(0, temp.find_last_not_of(delimiter) + 1);
+		iBuf = stoi(temp);
 		aPassenger.setflightNumber(iBuf);
 
 		passengers.insert(p_map::value_type(aPassenger.getReservationNumber(), aPassenger));
@@ -383,12 +406,14 @@ void ReservationSystem::flightDisplayMenu()
 }
 
 
+// # 9, 11
+// TODO
 void ReservationSystem::passengerSearch_Option()
 {
-	//Pause Program
-	pauseProgram();
+
 }
 
+// # 10
 void ReservationSystem::flightSearch_Option()
 {
 	char selection;
@@ -439,30 +464,69 @@ void ReservationSystem::flightSearch_Option()
 	} while (selection != '0');
 }
 
-
+// # 1
 void ReservationSystem::allPassengers_Option()
 {
-
-	//Pause program.
-	pauseProgram();
+	p_map::iterator it;
+	for (it = passengers.begin(); it != passengers.end(); it++)
+	{
+		cout << it->second << endl;
+	}
+	cout << endl;
 }
 
+// # 2
 void ReservationSystem::pasByDestination_Option()
 {
+	// TODO
+	// Input check this is a city
+	string city;
+	cout << "Please enter the destination city to check flights of: ";
+	cin >> city;
 
-	//Pause program.
-	pauseProgram();
+	cout << "All passengers going to " << city << ": " << endl;
+	for (f_map::iterator it = flights.begin(); it != flights.end(); ++it)
+	{
+		if (it->second.getDestination() == city)
+		{
+			vector<size_t> manifest = it->second.getManifest();
+			for (size_t i = 0; i < manifest.size(); ++i)
+			{
+				cout << manifest[i] << endl;
+			}
+		}
+	}
+	cout << endl;
 }
 
+// # 3
 void ReservationSystem::pasByDeparture_Option()
 {
+	// TODO
+	// Input check this is a city
+	string city;
+	cout << "Please enter the departure city to check flights of: ";
+	cin >> city;
 
-	//Pause program.
-	pauseProgram();
+	cout << "All passengers leaving " << city << ": " << endl;
+	for (f_map::iterator it = flights.begin(); it != flights.end(); ++it)
+	{
+		if (it->second.getOrigin() == city)
+		{
+			vector<size_t> manifest = it->second.getManifest();
+			for (size_t i = 0; i < manifest.size(); ++i)
+			{
+				cout << manifest[i] << endl;
+			}
+		}
+	}
+	cout << endl;
 }
 
+// # 4
 // TODO
-// Input check flight number
+// Input check flight number (is size_t)
+// Check if flight number exists
 void ReservationSystem::pasByFlight_Option()
 {
 	typedef p_map::iterator it_type;
@@ -473,13 +537,24 @@ void ReservationSystem::pasByFlight_Option()
 	{
 		if (iterator->second.getFlightNumber() == flight_num)
 		{
-			cout << iterator->second;
+			cout << iterator->second << endl;
 		}
 		//else
 		//Not On This Flight
 	}
+	cout << endl;
 }
 
+
+// Difference between passengers overbooked
+// and those waiting for a flight:
+// passengers overbooked did NOT make the flight and the flight has already taken off/begun
+// passengers waiting CAN make the flight because the time of the flight is in the future
+// check ReservationSystem.h to see the structure the time is stored in
+
+// # 5
+// TODO
+// Redo to check time according to flight class
 void ReservationSystem::pasOverbook_Option()
 {
 	for (size_t curFlight = 0; curFlight != flights.size(); curFlight++)
@@ -488,8 +563,12 @@ void ReservationSystem::pasOverbook_Option()
 		for (size_t iterator = 40; iterator >= p_vec.size(); iterator++)
 			passengers[p_vec[iterator]];
 	}
+	cout << endl;
 }
 
+// # 6
+// TODO
+// Redo time check according to new Flight class
 void ReservationSystem::pasWaiting_Option()
 {
 	for (size_t curFlight = 0; curFlight != flights.size(); curFlight++)
@@ -503,18 +582,34 @@ void ReservationSystem::pasWaiting_Option()
 		}
 		*/
 	}
+	cout << endl;
 }
 
+// # 7
 void ReservationSystem::allFlights_Option()
 {
+	for (f_map::iterator it = flights.begin(); it != flights.end(); ++it)
+	{
+		cout << it->second << endl;
+	}
 
-	//Pause program.
-	pauseProgram();
+	cout << endl;
 }
 
+// # 8
 void ReservationSystem::flightsAndPas_Option()
 {
+	for (f_map::iterator it = flights.begin(); it != flights.end(); ++it)
+	{
+		cout << it->second << endl;
+		cout << "Passengers: " << endl;
 
-	//Pause program.
-	pauseProgram();
+		vector<size_t> manifest = it->second.getManifest();
+		for (size_t i = 0; i < manifest.size(); ++i)
+		{
+			cout << " " << passengers[manifest[i]] << endl;
+		}
+		cout << endl;
+	}
+	cout << endl;
 }
