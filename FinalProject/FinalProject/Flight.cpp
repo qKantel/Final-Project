@@ -10,20 +10,24 @@
 
 ostream& operator<<(ostream& out, const Flight& flights)
 {
+	char departure[10], arrival[10];
+	strftime(departure, sizeof(departure), "%I:%M %p", &flights.getDepartTime());
+	strftime(arrival, sizeof(arrival), "%I:%M %p", &flights.getArriveTime());
+
 	out << "Flight Number: " << flights.getFlightNumber();
-	out << "\nDeparture Time: " << flights.getDepartTime();
-	out << "\nArrival Time: " << flights.getArriveTime();
+	out << "\nDeparture Time: " << departure;
+	out << "\nArrival Time: " << arrival;
 	out << "\nTotal Mileage: " << flights.getMileage();
 	out << "\nDeparting From: " << flights.getOrigin();
 	out << "\nDestination: " << flights.getDestination();
-	out << endl;
 
 	return out;
 }  // end overloaded << operator
 
-//==============================
-//		Private Methods
-//==============================
+
+   //==============================
+   //		Private Methods
+   //==============================
 
 bool Flight::addPilotClub(const size_t& reservation, bool& ableToAdd, size_t& reassign)
 {
@@ -170,15 +174,42 @@ bool Flight::addEconomy(const size_t& reservation, bool& ableToAdd, size_t& reas
    //==============================
 
 
+Flight::Flight() : flightNumber(0), mileage(0), fromCity(""), toCity("")
+{
+	// Get the current time
+	time(&currentTime);
+	localtime_s(&departureTime, &currentTime);
+	localtime_s(&arrivalTime, &currentTime);
+
+	departureTime.tm_sec = 0;
+	arrivalTime.tm_sec = 0;
+}  // end constructor
+
 Flight::Flight(const size_t& flightNumber, const size_t& departTime, const size_t& arriveTime, const size_t& mileage, const string& fromCity, const string& toCity)
 {
 	this->flightNumber = flightNumber;
-	this->departTime = departTime;
-	this->arriveTime = arriveTime;
 	this->mileage = mileage;
 	this->fromCity = fromCity;
 	this->toCity = toCity;
+
+	departureTime.tm_hour = static_cast<int> (departTime) / 100;
+	departureTime.tm_min = static_cast<int> (departTime) % 100;
+
+	arrivalTime.tm_hour = static_cast<int> (arriveTime) / 100;
+	arrivalTime.tm_min = static_cast<int> (arriveTime) % 100;
 }  // end constructor
+
+void Flight::addDepartTime(const size_t & departTime)
+{
+	departureTime.tm_hour = static_cast<int> (departTime) / 100;
+	departureTime.tm_min = static_cast<int> (departTime) % 100;
+}  // end addDepartTime
+
+void Flight::addArriveTime(const size_t & arriveTime)
+{
+	arrivalTime.tm_hour = static_cast<int> (arriveTime) / 100;
+	arrivalTime.tm_min = static_cast<int> (arriveTime) % 100;
+}  // end addArriveTime
 
 bool Flight::addPassenger(const size_t& reservation, const string& membership)
 {
