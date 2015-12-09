@@ -1,3 +1,8 @@
+/*
+*	file	Flight.h
+*	status	Complete
+*/
+
 #include <ctime>
 #include <deque>
 #include <iostream>
@@ -6,18 +11,19 @@
 #include <vector>
 using namespace std;
 
-#include "NotFoundException.h"
-
 #ifndef _FLIGHT
 #define _FLIGHT
 
-
+/*
+*	A Flight object in use with the reservation system.
+*	Contains information pertinent to the ReservationSystem.
+*/
 class Flight
 {
 	friend ostream& operator<<(ostream& out, const Flight& flights);
 
 private:
-	deque<size_t> pilotClub,		// Holds passenger according to their membership
+	deque<size_t> pilotClub,		// Holds passenger (reservation #) according to their membership
 		firstClass,
 		businessClass,
 		economy,
@@ -40,6 +46,7 @@ private:
 	bool addBusinessClass(const size_t& reservation, bool& ableToAdd, size_t& reassign);
 	bool addEconomy(const size_t& reservation, bool& ableToAdd, size_t& reassign);
 
+	bool remove(deque<size_t>& passengers, const size_t& reservation);
 
 public:
 	Flight();
@@ -51,6 +58,8 @@ public:
 	void addDestination(const string& to) { toCity = to; }
 	void addDepartTime(const size_t& departureTime);
 	void addArriveTime(const size_t& arrivalTime);
+
+	bool hasFlightLeft(tm atTime);
 
 	/** Total distance between departure and arrival city. */
 	void addMileage(const size_t& mileage) { this->mileage = mileage; };
@@ -72,13 +81,15 @@ public:
 
 	/** Returns a list of all passengers (reservation number) aboard flight */
 	vector<size_t> getManifest() const;
+	
+	/** Returns a list of overbooked passenger's reservation numbers */
+	deque<size_t> getOverBooked() const;
 
-	/** Returns passenger reservation number if on flight.
-	@throw NotFoundException if the passenger is not on the flight. */
-	void findPassenger(const size_t& reservation) const;
-
-	/** Removes passenger from manifest.  */
-	void removePassenger(const size_t& reservation);
+	/** Removes passenger from manifest. 
+	@pre  Flight has not yet departed  
+	@return true  If passenger is on flight
+			false If passenger is not on flight */
+	bool removePassenger(const size_t& reservation);
 };
 
 #endif
