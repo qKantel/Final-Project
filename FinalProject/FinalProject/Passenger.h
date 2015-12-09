@@ -18,7 +18,7 @@ using namespace std;
 class Passenger
 {
 	friend ostream &operator<<(ostream &, const Passenger &);
-	friend istream &operator>>(istream&, Passenger& );
+
 private:
 	string firstName;
 	string lastName;

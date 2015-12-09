@@ -820,9 +820,6 @@ void ReservationSystem::pasByDeparture_Option()
 }
 
 // # 4
-// TODO
-// Input check flight number (is size_t)
-// Check if flight number exists
 void ReservationSystem::pasByFlight_Option()
 {
 	typedef p_map::iterator it_type;
