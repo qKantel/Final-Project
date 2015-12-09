@@ -1,3 +1,8 @@
+/*
+*	file	Flight.cpp
+*	status	Complete
+*/
+
 #include "Flight.h"
 
 //==============================
@@ -25,9 +30,9 @@ ostream& operator<<(ostream& out, const Flight& flights)
 }  // end overloaded << operator
 
 
-   //==============================
-   //		Private Methods
-   //==============================
+//==============================
+//		Private Methods
+//==============================
 
 bool Flight::addPilotClub(const size_t& reservation, bool& ableToAdd, size_t& reassign)
 {
@@ -168,10 +173,38 @@ bool Flight::addEconomy(const size_t& reservation, bool& ableToAdd, size_t& reas
 	return ableToAdd;
 }  // end addEconomy
 
+bool Flight::remove(deque<size_t>& passengers, const size_t& reservation)
+{
+	size_t passengerToBoard;
+	string membership;
 
-   //==============================
-   //		Public Methods
-   //==============================
+	for (size_t i = 0; i < passengers.size(); i++)
+	{
+		if (passengers[i] == reservation)  // Found the passenger
+		{
+			passengers.erase(passengers.begin() + i);  // Remove from flight
+
+			// If flight has passengers waiting to board,
+			// Get 'oldest' passenger who is waiting to board
+			// Add passenger to the flight
+			if (waiting.size() > 0)
+			{
+				passengerToBoard = waiting.back();
+				waiting.pop_back();
+				membership = manifest.at(passengerToBoard);
+				addPassenger(passengerToBoard, membership);
+			}
+
+			return true;
+		}  // end if
+	}  // end for
+	return false;  // Did not find passenger
+}  // end remove
+
+
+//==============================
+//		Public Methods
+//==============================
 
 
 Flight::Flight() : flightNumber(0), mileage(0), fromCity(""), toCity("")
@@ -199,6 +232,13 @@ Flight::Flight(const size_t& flightNumber, const size_t& departTime, const size_
 	arrivalTime.tm_min = static_cast<int> (arriveTime) % 100;
 }  // end constructor
 
+
+bool Flight::hasFlightLeft(tm atTime)
+{
+	// Check if flight has left [reference time - departure time]
+	return (difftime (mktime(&atTime), mktime(&departureTime) ) ) >= 0;
+}
+
 void Flight::addDepartTime(const size_t & departTime)
 {
 	departureTime.tm_hour = static_cast<int> (departTime) / 100;
@@ -216,7 +256,7 @@ bool Flight::addPassenger(const size_t& reservation, const string& membership)
 	bool ableToAdd = true;  // Only false if 10 passengers have been reassigned
 	size_t reassign;  // For assigning passengers to different seats
 
-	if (waiting.size() >= 10)  // Can only displace 10 passengers, so any new passengers are added to waitlist
+	if (waiting.size() > 10)  // Can only displace 10 passengers, so any new passengers are added to waitlist
 	{
 		waiting.push_front(reservation);
 		ableToAdd = false;  // Unable to board, add to waitlist
@@ -236,22 +276,34 @@ bool Flight::addPassenger(const size_t& reservation, const string& membership)
 	return ableToAdd;
 }  // end addPassenger
 
-void Flight::removePassenger(const size_t& reservation)
+bool Flight::removePassenger(const size_t& reservation)
 {
-	manifest.erase(reservation);
-}  // end removePassenger
+	bool ableToRemove = false;
 
-void Flight::findPassenger(const size_t& reservation) const
-{
-	try
+	if ( manifest.count(reservation) )
 	{
-		manifest.find(reservation);
-	}
-	catch (const NotFoundException&)
-	{
-		cout << "Unable to find passenger aboard flight " << flightNumber << endl;
-	}
-}  // end findPassenger
+		// Remove from appropriate section
+		string membership = manifest.at(reservation);
+		
+		if (membership == "Pilot Club")
+			ableToRemove = (remove (pilotClub, reservation) );
+		else if (membership == "First Class")
+			ableToRemove = (remove (firstClass, reservation) );
+		else if (membership == "Business Class")
+			ableToRemove = (remove (businessClass, reservation) );
+		else if (membership == "Economy")
+			ableToRemove = (remove (economy, reservation) );
+		
+		if(!ableToRemove)
+			ableToRemove = (remove (waiting, reservation) );
+		
+		manifest.erase(reservation);  // Remove from manifest
+
+		return ableToRemove;
+	}  // end if
+	else  // Not on manifest
+		return ableToRemove;
+}  // end removePassenger
 
 vector<size_t> Flight::getManifest() const
 {
@@ -261,3 +313,8 @@ vector<size_t> Flight::getManifest() const
 
 	return manifestToReturn;
 }  // end getManifest
+
+deque<size_t> Flight::getOverBooked() const
+{
+	return waiting;
+}  // end getOverBooked

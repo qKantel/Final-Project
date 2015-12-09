@@ -18,39 +18,33 @@
     <ClCompile Include="FinalProject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Flight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlightLocation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlightMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Passenger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ReservationSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Flight.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Passenger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Flight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AdjListNode.h">
+    <ClInclude Include="FlightLocation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Edge.h">
+    <ClInclude Include="FlightMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HashTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LinkedHashedEntry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NotFoundException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graph.h">
+    <ClInclude Include="Passenger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ReservationSystem.h">

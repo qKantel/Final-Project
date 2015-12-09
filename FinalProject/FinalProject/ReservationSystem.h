@@ -1,4 +1,7 @@
-
+/*
+*	file	ReservationSystem.h
+*	status	Complete
+*/
 #ifndef RS_H
 #define RS_H
 
@@ -7,49 +10,51 @@
 
 // containers
 #include <map>
+#include <set>
 
-// input/output
+// IO
 #include <fstream>
 #include <iostream>
 
 // local includes
 #include "Flight.h"
-#include "Graph.h"
 #include "Passenger.h"
+#include "FlightMap.h"
 
+/* Typedefs */
 typedef map <size_t, Passenger> p_map;
 typedef map <size_t, Flight> f_map;
 
+/*
+*	Displays a user interface. Allows the user to perform a variety of functions to run an airline system.
+*/
 class ReservationSystem
 {
 public:
-	static ReservationSystem& getInstance()
-	{
-		if (!p_rsvs_instance_)
-		{
-			p_rsvs_instance_ = new ReservationSystem();
-			p_rsvs_instance_->initialize();
-		}
-		return *p_rsvs_instance_;
-	}
+	// Constructor
+	/*
+	*	parameters
+	*	- baseTime		time the user is running the program in relation to the day
+	*/
+	ReservationSystem(tm baseTime);
 
-	bool runMenu();	// Returns false when user is done with the menu
-	void closeMenu(); // Destructor is called, cleans up data containers
+	/*
+	*	return
+	*	- bool		returns false when the user is done with the menu
+	*	info
+	*	- Continually runs the menu system as long as the user does not ask to exit.
+	*/
+	bool runMenu();
 
 private:
-	// Singleton definition
-	static ReservationSystem* p_rsvs_instance_;
-
-	ReservationSystem() {}
-	~ReservationSystem() {}
-	ReservationSystem(const ReservationSystem &)	= delete; // Copy constructor function deleted
-	void operator= (const ReservationSystem &)		= delete; // Assignment operator function deleted
+	ReservationSystem(const ReservationSystem &) {} // Copy constructor function deleted
+	void operator= (const ReservationSystem &) {} // Assignment operator function deleted
 
 	// Class Data
 	p_map passengers;
 	f_map flights;
-	vector<string> cities;
-	Graph<char, int> *flightMap;
+	set<string> cities;
+	FlightMap flightMap;
 	tm input_time;
 
 	// Initialization
@@ -58,7 +63,13 @@ private:
 	// Utility Functions
 	bool openFlightData(const string& fileName);
 	bool openPassengerData(const string& fileName);
-	void createGraph();
+
+	void uppercaseString(std::string& s);
+	bool caseInsensitiveStringEquals(const std::string& a, const std::string& b);
+
+	void parseFlightNumber(size_t& flightNumber);
+	void parsePassengerName(string& firstName, string& lastName);
+
 
 	// Menu Functions
 	void endProgram(const int returnValue);
@@ -69,6 +80,7 @@ private:
 	void passengerDisplayMenu();
 	void flightDisplayMenu();
 	// Menu Options
+	void deletePassenger_Option();
 	void passengerSearch_Option();
 	void flightSearch_Option();
 	void allPassengers_Option();
