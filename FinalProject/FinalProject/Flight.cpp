@@ -30,9 +30,9 @@ ostream& operator<<(ostream& out, const Flight& flights)
 }  // end overloaded << operator
 
 
-//==============================
-//		Private Methods
-//==============================
+   //==============================
+   //		Private Methods
+   //==============================
 
 bool Flight::addPilotClub(const size_t& reservation, bool& ableToAdd, size_t& reassign)
 {
@@ -54,13 +54,22 @@ bool Flight::addPilotClub(const size_t& reservation, bool& ableToAdd, size_t& re
 					businessClass.pop_back();
 					economy.push_front(reassign);
 
+					// Need to adjust membership from Business to Economy just for this flight
+					manifest.erase(reassign);
+					manifest.emplace(reassign, "Economy");
+
 					// Move First to Business
 					reassign = firstClass.back();
 					firstClass.pop_back();
 					businessClass.push_front(reassign);
 
-					// Add Pilot to First
+					// Adjust membership from First to Business
+					manifest.erase(reassign);
+					manifest.emplace(reassign, "Business Class");
+
+					// Add Pilot to First & adjust membership to First Class
 					firstClass.push_front(reservation);
+					manifest.emplace(reservation, "First Class");
 				}
 				else  // Economy isn't full, but Pilot, First, and Business are
 				{
@@ -69,13 +78,22 @@ bool Flight::addPilotClub(const size_t& reservation, bool& ableToAdd, size_t& re
 					businessClass.pop_back();
 					economy.push_front(reassign);
 
+					// Adjust membership from Business to Economy
+					manifest.erase(reassign);
+					manifest.emplace(reassign, "Economy");
+
 					// Move First to Business
 					reassign = firstClass.back();
 					firstClass.pop_back();
 					businessClass.push_front(reassign);
 
-					// Add Pilot to First
+					// Adjust membership from First to Business
+					manifest.erase(reassign);
+					manifest.emplace(reassign, "Business Class");
+
+					// Add Pilot to First & adjust membership to First Class
 					firstClass.push_front(reservation);
+					manifest.emplace(reservation, "First Class");
 				}
 			}
 			else  // Business Class isn't full, but Pilot and First are
@@ -85,15 +103,26 @@ bool Flight::addPilotClub(const size_t& reservation, bool& ableToAdd, size_t& re
 				firstClass.pop_back();
 				businessClass.push_front(reassign);
 
-				// Add Pilot to First
+				// Adjust membership from First to Business
+				manifest.erase(reassign);
+				manifest.emplace(reassign, "Business Class");
+
+				// Add Pilot to First & adjust membership to First Class
 				firstClass.push_front(reservation);
+				manifest.emplace(reservation, "First Class");
 			}
 		}
 		else  // First Class isn't full, add without reassigning passengers
+		{
 			firstClass.push_front(reservation);
+			manifest.emplace(reservation, "First Class");  // Add as First Class member
+		}
 	}
 	else  // Pilot Club isn't full, add without reassigning passengers
+	{
 		pilotClub.push_front(reservation);
+		manifest.emplace(reservation, "Pilot Club");
+	}
 
 	return ableToAdd;
 }  // end addPilotclub
@@ -116,8 +145,13 @@ bool Flight::addFirstClass(const size_t& reservation, bool& ableToAdd, size_t& r
 				businessClass.pop_back();
 				economy.push_front(reassign);
 
-				// Add First to Business
+				// Adjust membership from Business to Economy
+				manifest.erase(reassign);
+				manifest.emplace(reassign, "Economy");
+
+				// Add First to Business & adjust membership from First to Business
 				businessClass.push_front(reservation);
+				manifest.emplace(reservation, "Business Class");
 			}
 			else  // Economy Class isn't full, but First and Business Class are
 			{
@@ -126,15 +160,26 @@ bool Flight::addFirstClass(const size_t& reservation, bool& ableToAdd, size_t& r
 				businessClass.pop_back();
 				economy.push_front(reassign);
 
-				// Add First to Business
+				// Adjust membership from Business to Economy
+				manifest.erase(reassign);
+				manifest.emplace(reassign, "Economy");
+
+				// Add First to Business & adjust membership to Business
 				businessClass.push_front(reservation);
+				manifest.emplace(reservation, "Business Class");
 			}
 		}
 		else  // Business Class isn't full, add without reassigning passengers
+		{
 			businessClass.push_front(reservation);
+			manifest.emplace(reservation, "Business Class");  // Add as a Business Class member
+		}
 	}
 	else  // First Class isn't full, add without reassigning passengers
+	{
 		firstClass.push_front(reservation);
+		manifest.emplace(reservation, "First Class");
+	}
 
 	return ableToAdd;
 }  // end addFirstClass
@@ -150,15 +195,21 @@ bool Flight::addBusinessClass(const size_t& reservation, bool& ableToAdd, size_t
 			economy.pop_back();
 			waiting.push_front(reassign);
 
-			// Add Business to Economy
+			// Add Business to Economy & adjust membership from Business to Economy
 			economy.push_front(reservation);
-
+			manifest.emplace(reservation, "Economy");
 		}
 		else  // Economy isn't full, add without reassigning passengers
+		{
 			economy.push_front(reservation);
+			manifest.emplace(reservation, "Economy");  // Add as Economy member
+		}
 	}
 	else  // Business Class isn't full, add without reassigning passengers
+	{
 		businessClass.push_front(reservation);
+		manifest.emplace(reservation, "Business Class");
+	}
 
 	return ableToAdd;
 }  // end addBusinessClass
@@ -169,6 +220,9 @@ bool Flight::addEconomy(const size_t& reservation, bool& ableToAdd, size_t& reas
 		waiting.push_front(reservation);
 	else  // Economy Class isn't full yet, add without reassigning passengers
 		economy.push_front(reservation);
+
+	// Add as Economy member
+	manifest.emplace(reservation, "Economy");
 
 	return ableToAdd;
 }  // end addEconomy
@@ -184,9 +238,9 @@ bool Flight::remove(deque<size_t>& passengers, const size_t& reservation)
 		{
 			passengers.erase(passengers.begin() + i);  // Remove from flight
 
-			// If flight has passengers waiting to board,
-			// Get 'oldest' passenger who is waiting to board
-			// Add passenger to the flight
+													   // If flight has passengers waiting to board,
+													   // Get 'oldest' passenger who is waiting to board
+													   // Add passenger to the flight
 			if (waiting.size() > 0)
 			{
 				passengerToBoard = waiting.back();
@@ -202,9 +256,9 @@ bool Flight::remove(deque<size_t>& passengers, const size_t& reservation)
 }  // end remove
 
 
-//==============================
-//		Public Methods
-//==============================
+   //==============================
+   //		Public Methods
+   //==============================
 
 
 Flight::Flight() : flightNumber(0), mileage(0), fromCity(""), toCity("")
@@ -236,7 +290,7 @@ Flight::Flight(const size_t& flightNumber, const size_t& departTime, const size_
 bool Flight::hasFlightLeft(tm atTime)
 {
 	// Check if flight has left [reference time - departure time]
-	return (difftime (mktime(&atTime), mktime(&departureTime) ) ) >= 0;
+	return (difftime(mktime(&atTime), mktime(&departureTime))) >= 0;
 }
 
 void Flight::addDepartTime(const size_t & departTime)
@@ -259,6 +313,7 @@ bool Flight::addPassenger(const size_t& reservation, const string& membership)
 	if (waiting.size() > 10)  // Can only displace 10 passengers, so any new passengers are added to waitlist
 	{
 		waiting.push_front(reservation);
+		manifest.emplace(reservation, membership);  // Add to manifest
 		ableToAdd = false;  // Unable to board, add to waitlist
 	}
 	// 10 passengers have not been reassigned/displaced
@@ -271,8 +326,6 @@ bool Flight::addPassenger(const size_t& reservation, const string& membership)
 	else if (membership == "Economy")  // Add economy class passengers up to max capacity
 		ableToAdd = addEconomy(reservation, ableToAdd, reassign);
 
-	manifest.emplace(reservation, membership);  // Keep track of total passengers
-
 	return ableToAdd;
 }  // end addPassenger
 
@@ -280,23 +333,23 @@ bool Flight::removePassenger(const size_t& reservation)
 {
 	bool ableToRemove = false;
 
-	if ( manifest.count(reservation) )
+	if (manifest.count(reservation))
 	{
 		// Remove from appropriate section
 		string membership = manifest.at(reservation);
-		
+
 		if (membership == "Pilot Club")
-			ableToRemove = (remove (pilotClub, reservation) );
+			ableToRemove = (remove(pilotClub, reservation));
 		else if (membership == "First Class")
-			ableToRemove = (remove (firstClass, reservation) );
+			ableToRemove = (remove(firstClass, reservation));
 		else if (membership == "Business Class")
-			ableToRemove = (remove (businessClass, reservation) );
+			ableToRemove = (remove(businessClass, reservation));
 		else if (membership == "Economy")
-			ableToRemove = (remove (economy, reservation) );
-		
-		if(!ableToRemove)
-			ableToRemove = (remove (waiting, reservation) );
-		
+			ableToRemove = (remove(economy, reservation));
+
+		if (!ableToRemove)
+			ableToRemove = (remove(waiting, reservation));
+
 		manifest.erase(reservation);  // Remove from manifest
 
 		return ableToRemove;

@@ -1,3 +1,4 @@
+
 /*
 *	group		Left Group
 *	class		CS M20 - Chetlen
@@ -28,7 +29,9 @@ int main()
 
 	while (!valid_time) // Wait for user to enter proper time
 	{
-		cout << "Please input your time reference (format HH:MM) (Type E or Q to quit): ";
+		cout << "Please input the time at which you wish to check the state of the flights." << endl;
+		cout << "The time format is (HH:MM) (Type E or Q to quit): ";
+
 		getline(cin, time_str);
 
 		// Exit variables
@@ -48,21 +51,21 @@ int main()
 				cout << "That was an invalid time." << endl;
 			}
 		}
-		else if(time_str == "united")
+		else if (time_str == "united")
 		{
 			string input;
 
-			while(true)
+			while (true)
 			{
 				cout << endl << "Welcome to the United Airlines Flight Delay Query System!" << endl;
 				cout << "Please enter a flight number to check if it has been delayed or enter \'E\' to exit: ";
 				cin >> input;
 				cout << endl;
-				if(input == "E" || input == "e")
+				if (input == "E" || input == "e")
 					break;
 
 				cout << "Flight " << input << " has been INDEFINTELY delayed due to: {INSERT_REASON}" << endl;
-				
+
 			}
 		}
 		else // invalid time input

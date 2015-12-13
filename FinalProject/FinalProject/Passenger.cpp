@@ -18,10 +18,16 @@ Passenger::Passenger(string afirstName, string alastName, string aMembership, si
 {
 }
 
-ostream& operator<<(ostream& out , const Passenger& aPassenger)
+ostream& operator<<(ostream& out, const Passenger& aPassenger)
 {
-	out << aPassenger.getReservationNumber() << "   " << aPassenger.getFirstName() << "   " << aPassenger.getLastName() << "   " << aPassenger.getMembership()
-		<< "   " << aPassenger.getFlightNumber();
+	//old way of displaying a passenger. Left in here so it doesnt get repeated
+	//	out << aPassenger.getReservationNumber() << "   " << aPassenger.getFirstName() << "   " << aPassenger.getLastName() << "   " << aPassenger.getMembership()
+	//		<< "   " << aPassenger.getFlightNumber();
+
+
+	out << aPassenger.getFirstName() << " " << aPassenger.getLastName() << endl;
+	out << "   Reservation #" << aPassenger.getReservationNumber() << endl;
+	out << "   " << aPassenger.getMembership() << " on Flight #" << aPassenger.getFlightNumber();
 	return out;
 
 }
